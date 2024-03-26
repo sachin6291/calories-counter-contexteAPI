@@ -1,26 +1,52 @@
+import { useState, ChangeEvent } from "react"
 import { categories } from "../data/category"
+import { Activity } from "../types"
 
 export default function Form() {
+
+    const[activity, setActivity]= useState<Activity>({
+        category:1,
+        name:'',
+        calories:0
+    })
+    
+    const handleChange=(e: ChangeEvent<HTMLInputElement>|ChangeEvent<HTMLSelectElement>)=>{
+        const isNumberFeild=['category', 'calories'].includes(e.target.id)
+        setActivity({
+            ...activity,
+            [e.target.id]: isNumberFeild? +e.target.value : e.target.value
+        })
+        
+    }
+
   return (
     <form className=" space-y-5 bg-gray-800 shadow p-10 ">
         <div className="grid grid-cols-1 gap-3">
             <label htmlFor="category" className=" font-semibold text-white">Category:</label>
-            <select className="border-2 border-lime-600 p-2  w-full bg-lime-50" id="category">
+            <select 
+                className="border-2 border-lime-600 p-2  w-full bg-lime-50" 
+                id="category" 
+                value={activity.category}
+                onChange={handleChange}>
+
                 {categories.map(category=>(
                     <option key={category.id}
                     value={category.id}>
                         {category.name}
                     </option>))}
+
             </select>
         </div>
 
         <div className="grid grid-cols-1 gap-3">
-            <label htmlFor="activity" className=" font-semibold text-white">Activity:</label>
+            <label htmlFor="name" className=" font-semibold text-white">Activity:</label>
             <input
                 type="text"
-                id="activity"
+                id="name"
                 className=" border-2 border-lime-600 p-2 w-full bg-lime-50"
                 placeholder="Ex. Food, Orange Juice, Salad, Exercise, Weights, Bicycle"
+                value={activity.name}
+                onChange={handleChange}
             />
         </div>
 
@@ -31,6 +57,8 @@ export default function Form() {
                 id="calories"
                 className=" border-2 border-lime-600 p-2 w-full bg-lime-50"
                 placeholder="Calories e.g. 300 or 500"
+                value={activity.calories}
+                onChange={handleChange}
             />
         </div>
 
