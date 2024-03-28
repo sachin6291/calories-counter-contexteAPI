@@ -1,19 +1,24 @@
 import { useState, ChangeEvent, FormEvent, Dispatch} from "react"
+import {v4 as uuidv4} from 'uuid'
 import { categories } from "../data/category"
 import { Activity } from "../types"
-import { ActivityActions } from "../reducers/activity-reducer"
+import { ActivityActions, ActivityState } from "../reducers/activity-reducer"
 
 type FormProps={
     dispatch: Dispatch<ActivityActions>
+    state: ActivityState
 }
 
-export default function Form({dispatch}:FormProps) {
+export default function Form({dispatch, state}:FormProps) {
 
-    const[activity, setActivity]= useState<Activity>({
+    const initialState: Activity ={
         category:1,
         name:'',
-        calories:0
-    })
+        calories:0,
+        id: uuidv4()
+    }
+
+    const[activity, setActivity]= useState<Activity>(initialState)
     
     const handleChange=(e: ChangeEvent<HTMLInputElement>|ChangeEvent<HTMLSelectElement>)=>{
         const isNumberFeild=['category', 'calories'].includes(e.target.id)
@@ -34,6 +39,11 @@ export default function Form({dispatch}:FormProps) {
         e.preventDefault()
         
         dispatch({type:'save-activity', payload:{newActivity : activity}})
+
+        setActivity({
+            ...initialState, 
+            id: uuidv4()
+        })
         
     }
 
