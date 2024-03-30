@@ -3,7 +3,8 @@ import { Activity } from "../types"
 export type ActivityActions=
     {type: 'save-activity', payload:{newActivity: Activity}} |
     {type: 'set-activeId', payload:{id: Activity['id']} } |
-    {type: 'delete-activity', payload:{id: Activity['id']}}
+    {type: 'delete-activity', payload:{id: Activity['id']}} |
+    {type: 'reset-activities'}
 
 
 export type ActivityState={
@@ -11,11 +12,14 @@ export type ActivityState={
     activeId: Activity['id']
 }
 
+const localSorageActivities= ():Activity[]=>{
+    const activities= localStorage.getItem('activities')
+    return activities? JSON.parse(activities):[]
+}
 export const initialState : ActivityState={
-    activities: [], 
+    activities: localSorageActivities(), 
     activeId: ''
 }
-
 export const activityReducer=(
     state: ActivityState = initialState,
     action: ActivityActions
@@ -46,6 +50,11 @@ export const activityReducer=(
             return{
                 ...state,
                 activities: state.activities.filter(activity => activity.id !== action.payload.id)
+            }
+        case "reset-activities":
+            return{
+                activities:[],
+                activeId:''
             }
     }
     return state
