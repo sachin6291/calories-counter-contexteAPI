@@ -18,7 +18,7 @@ function App() {
   return (
     <>
       <header className=" bg-lime-600 py-3">
-        <div className=" max-w-4xl mx-auto flex justify-between">
+        <div className=" max-w-4xl mx-auto flex justify-between items-center">
           <div className="flex">
           <img src='/calories-svgrepo-black.svg' alt="logo" className=" h-7 mr-4"/>
           <h1 className="text-center text-lg font-bold text-white uppercase">Calories Counter</h1>
